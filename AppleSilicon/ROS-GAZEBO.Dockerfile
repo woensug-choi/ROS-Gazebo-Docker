@@ -11,6 +11,14 @@
 # ------------------------------------ #
 # For tutorial:
 # https://woensug-choi.github.io/jump-to-ros-gazebo/jekyll/Start.html#%EC%98%B5%EC%85%98-2-docker%EB%A1%9C-%EC%84%A4%EC%B9%98
+# For Apple Silicon Build and Run with Podman
+# To Build (Recommend building on other desktop since podman is very slow at building images including large files)
+# podman build --log-level=debug -t imagename:tag -f AppleSilicon/ROS-GAZEBO.Dockerfile .
+# To Run
+# podman run --interactive --rm --device /dev/snd --device /dev/input \
+# --device /dev/dri --tty --volume /tmp/.X11-unix:/tmp/.X11-unix:ro \
+# --security-opt label=type:container_runtime_t \
+# --volume /etc/localtime:/etc/localtime:ro -e DISPLAY=$(hostname):0 imagename:tag
 
 # Starting from ubuntu 22.04
 FROM ubuntu:22.04
@@ -83,7 +91,7 @@ RUN apt -y install \
 RUN export PATH=$PATH:$HOME/.local/bin/ && \
     echo "" >> ~/.bashrc && echo "# Path settings for local pip installations" >> ~/.bashrc && \
     echo "export PATH=$PATH:$HOME/.local/bin/" >> ~/.bashrc
-RUN pip install vcstool && install -U colcon-common-extensions
+RUN pip install vcstool && pip install colcon-common-extensions
 
 # Make directory for workspace to download and compile
 RUN mkdir -p /gazebo/src && cd /gazebo/src && \
@@ -91,7 +99,7 @@ RUN mkdir -p /gazebo/src && cd /gazebo/src && \
     vcs import < collection-fortress.yaml
 
 # Compile
-RUN cd /gazebo && colcon build --merge-install
+# RUN cd /gazebo && colcon build --merge-install
 
 # ------------ SET-UP A USER ------------- #
 # Make user (assume host user has 1000:1000 permission)
@@ -113,6 +121,6 @@ RUN echo "" >> ~/.bashrc && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
 # Set-up Gazebo Environment as default
-RUN echo "" >> ~/.bashrc && \
-    echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
-    echo "source /gazebo/install/setup.bash" >> ~/.bashrc
+# RUN echo "" >> ~/.bashrc && \
+#     echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
+#     echo "source /gazebo/install/setup.bash" >> ~/.bashrc

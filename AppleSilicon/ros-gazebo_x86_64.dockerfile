@@ -13,9 +13,9 @@
 # https://woensug-choi.github.io/jump-to-ros-gazebo/jekyll/Start.html#%EC%98%B5%EC%85%98-2-docker%EB%A1%9C-%EC%84%A4%EC%B9%98
 # For Apple Silicon Build and Run with Podman
 # To Build (Recommend building on other desktop since podman is very slow at building images including large files)
-# podman build --log-level=debug -t imagename:tag -f AppleSilicon/ROS-GAZEBO.Dockerfile .
+# podman build --log-level=debug -t imagename:tag -f AppleSilicon/ros-gazebo_x86_64.dockerfile .
 # To Run
-# podman run --interactive --rm --device /dev/snd --device /dev/input \
+# podman run --interactive --privileged --rm --device /dev/snd --device /dev/input \
 # --device /dev/dri --tty --volume /tmp/.X11-unix:/tmp/.X11-unix:ro \
 # --security-opt label=type:container_runtime_t \
 # --volume /etc/localtime:/etc/localtime:ro -e DISPLAY=$(hostname):0 imagename:tag
@@ -121,6 +121,6 @@ RUN echo "" >> ~/.bashrc && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
 # Set-up Gazebo Environment as default
-# RUN echo "" >> ~/.bashrc && \
-#     echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
-#     echo "source /gazebo/install/setup.bash" >> ~/.bashrc
+RUN echo "" >> ~/.bashrc && \
+    echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
+    echo "source /gazebo/install/setup.bash" >> ~/.bashrc

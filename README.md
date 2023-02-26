@@ -1,4 +1,6 @@
-# Dockerfiles for M1 Macbook
+# Dockerfiles for ROS Gazebo images
 
-For information : [Notion 
-Page](https://yeongdocat.notion.site/M1-Macbook-running-X86-Docker-container-e2cfaaadfffd4acdb4101d90e2750805)
+## Versions
+- Ubuntu : 22.04
+- ROS : ROS 2 Humble
+- Gazebo : Gazebo Fortress

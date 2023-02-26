@@ -87,7 +87,7 @@ RUN mkdir -p /gazebo/src && cd /gazebo/src && \
     vcs import < collection-fortress.yaml
 
 # Compile
-# RUN cd /gazebo && colcon build --merge-install
+RUN cd /gazebo && colcon build --merge-install
 
 # ------------ SET-UP A USER ------------- #
 # Make user (assume host user has 1000:1000 permission)
@@ -108,7 +108,7 @@ RUN echo "" >> ~/.bashrc && \
     echo "# Set ROS Environment alive" >> ~/.bashrc && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
-Set-up Gazebo Environment as default
+# Set-up Gazebo Environment as default
 RUN echo "" >> ~/.bashrc && \
     echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
     echo "source /gazebo/install/setup.bash" >> ~/.bashrc

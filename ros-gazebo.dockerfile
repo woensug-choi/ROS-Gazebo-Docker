@@ -83,6 +83,14 @@ RUN mkdir -p /gazebo/src && cd /gazebo/src && \
     wget https://raw.githubusercontent.com/ignition-tooling/gazebodistro/master/collection-fortress.yaml && \
     vcs import < collection-fortress.yaml
 
+RUN apt -y install \
+    $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/ignition\|sdf/d' | tr '\n' ' ')
+
+RUN apt install -y python3-pip python-is-python3 python3-distutils build-essential \
+        cmake libtinyxml2-dev libavutil-dev libavcodec-dev libavformat-dev libavdevice-dev \
+        libfreeimage-dev libeigen3-dev libgts-dev libprotobuf-dev libprotoc-dev \
+        protobuf-compiler protobuf-c-compiler pkg-config ruby
+
 # Compile
 RUN cd /gazebo && colcon build --merge-install
 

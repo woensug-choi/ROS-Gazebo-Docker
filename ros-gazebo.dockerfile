@@ -84,7 +84,7 @@ RUN mkdir -p /gazebo/src && cd /gazebo/src && \
     vcs import < collection-fortress.yaml
 
 # Compile
-# RUN cd /gazebo && colcon build --merge-install
+RUN cd /gazebo && colcon build --merge-install
 
 # ------------ SET-UP A USER ------------- #
 # Make user (assume host user has 1000:1000 permission)

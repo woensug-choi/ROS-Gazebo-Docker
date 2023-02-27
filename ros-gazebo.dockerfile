@@ -69,30 +69,35 @@ RUN wget https://packages.osrfoundation.org/gazebo.gpg \
     -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null && \
     apt-get update
-RUN apt -y install \
-    $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/ignition\|sdf/d' | tr '\n' ' ')
 
-# Install vcstool and colcon
-RUN export PATH=$PATH:$HOME/.local/bin/ && \
-    echo "" >> ~/.bashrc && echo "# Path settings for local pip installations" >> ~/.bashrc && \
-    echo "export PATH=$PATH:$HOME/.local/bin/" >> ~/.bashrc
-RUN pip install vcstool && pip install colcon-common-extensions
+# Install Ignition Fortress binary
+RUN apt -y install ignition-fortress
 
-# Make directory for workspace to download and compile
-RUN mkdir -p /gazebo/src && cd /gazebo/src && \
-    wget https://raw.githubusercontent.com/ignition-tooling/gazebodistro/master/collection-fortress.yaml && \
-    vcs import < collection-fortress.yaml
+# # For source code installation
+# RUN apt -y install \
+#     $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/ignition\|sdf/d' | tr '\n' ' ')
 
-# Install dependency libraries again
-RUN apt -y install \
-    $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/ignition\|sdf/d' | tr '\n' ' ')
-RUN apt install -y python3-pip python-is-python3 python3-distutils build-essential \
-        cmake libtinyxml2-dev libavutil-dev libavcodec-dev libavformat-dev libavdevice-dev \
-        libfreeimage-dev libeigen3-dev libgts-dev libprotobuf-dev libprotoc-dev \
-        protobuf-compiler protobuf-c-compiler pkg-config ruby apt-utils
+# # Install vcstool and colcon
+# RUN export PATH=$PATH:$HOME/.local/bin/ && \
+#     echo "" >> ~/.bashrc && echo "# Path settings for local pip installations" >> ~/.bashrc && \
+#     echo "export PATH=$PATH:$HOME/.local/bin/" >> ~/.bashrc
+# RUN pip install vcstool && pip install colcon-common-extensions
 
-# Compile
-RUN cd /gazebo && colcon build --merge-install
+# # Make directory for workspace to download and compile
+# RUN mkdir -p /gazebo/src && cd /gazebo/src && \
+#     wget https://raw.githubusercontent.com/ignition-tooling/gazebodistro/master/collection-fortress.yaml && \
+#     vcs import < collection-fortress.yaml
+
+# # Install dependency libraries again
+# RUN apt -y install \
+#     $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/ignition\|sdf/d' | tr '\n' ' ')
+# RUN apt install -y python3-pip python-is-python3 python3-distutils build-essential \
+#         cmake libtinyxml2-dev libavutil-dev libavcodec-dev libavformat-dev libavdevice-dev \
+#         libfreeimage-dev libeigen3-dev libgts-dev libprotobuf-dev libprotoc-dev \
+#         protobuf-compiler protobuf-c-compiler pkg-config ruby apt-utils
+
+# # Compile
+# RUN cd /gazebo && colcon build --merge-install
 
 # ------------ SET-UP A USER ------------- #
 # Make user (assume host user has 1000:1000 permission)
